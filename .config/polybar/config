@@ -1,0 +1,145 @@
+[colors]
+background = ${xrdb:background:#222}
+foreground = ${xrdb:color7:#222}
+color1 = ${xrdb:color1:#222}
+color2 = ${xrdb:color2:#222}
+color3 = ${xrdb:color3:#222}
+color4 = ${xrdb:color4:#222}
+color5 = ${xrdb:color5:#222}
+color6 = ${xrdb:color6:#222}
+color7 = ${xrdb:color7:#222}
+color8 = ${xrdb:color8:#222}
+color9 = ${xrdb:color9:#222}
+
+[bar/shadow]
+monitor = ${env:MONITOR:}
+override-redirect = true
+# bottom = true
+offset-x = 24
+offset-y = 70
+height = 5
+wm-restack=bspwm
+background = ${colors.color5}
+modules-left = seal
+width = 100%:-48
+radius=0
+
+[bar/main]
+monitor = ${env:MONITOR:}
+override-redirect = true
+# bottom = true
+offset-x = 0
+offset-y = 0
+height = 30
+wm-restack=bspwm
+background = ${colors.background}
+foreground = ${colors.foreground}
+font-0 = azukifontB:style=Bold:pixelsize=9;2
+font-1 = OpenMoji:style=Color:size=18;4
+font-2 = siji:pixelsize=10;1
+font-3 = azukifontB:style=Bold:pixelsize=16;1
+border-size = 8
+border-color = ${colors.background}
+modules-left = seal bspwm
+modules-right = temperature date
+width = 100%
+modules-center = polywins
+line-size = 2
+radius=0
+
+[module/seal]
+type = custom/text
+content =  %{T1}😽
+content-padding = 1
+
+[module/date]
+type = internal/date
+interval = 5
+
+date = "~"
+date-alt = "%Y-%m-%d"
+date-foreground = ${colors.color2}
+border-color = ${colors.color2}
+
+time = %H:%M
+time-alt = %H:%M:%S
+
+format-prefix = 
+format-prefix-foreground = ${colors.foreground-alt}
+format-padding = 3
+format-margin = 0
+format-background = ${colors.color1}
+
+label = %date% %time%
+
+[module/polywins]
+type = custom/script
+exec = ~/scripts/polywins.sh 2>/dev/null
+format = <label>
+label = %output%
+label-padding = 1
+tail = true
+
+[module/bspwm]
+type = internal/bspwm
+
+; Only show workspaces defined on the same output as the bar
+; NOTE: The bspwm and XRandR monitor names must match, which they do by default.
+; But if you rename your bspwm monitors with bspc -n this option will no longer
+; behave correctly.
+; Default: true
+pin-workspaces = true
+
+; Output mode flags after focused state label
+; Default: false
+inline-mode = false
+
+; Create click handler used to focus workspace
+; Default: true
+enable-click = false
+
+; Create scroll handlers used to cycle workspaces
+; Default: true
+enable-scroll = false
+
+; Set the scroll cycle direction 
+; Default: true
+reverse-scroll = false
+
+; Use fuzzy (partial) matching on labels when assigning 
+; icons to workspaces
+; Example: code;♚ will apply the icon to all workspaces 
+; containing 'code' in the label
+; Default: false
+fuzzy-match = true
+
+label-focused-foreground = ${colors.color5}
+line-color = ${colors.color5}
+
+[module/temperature]
+type = internal/temperature
+
+; Seconds to sleep between updates
+; Default: 1
+interval = 0.5
+
+; Thermal zone to use
+; To list all the zone types, run 
+; $ for i in /sys/class/thermal/thermal_zone*; do echo "$i: $(<$i/type)"; done
+; Default: 0
+thermal-zone = 0
+
+; Full path of temperature sysfs path
+; Use `sensors` to find preferred temperature source, then run
+; $ for i in /sys/class/hwmon/hwmon*/temp*_input; do echo "$(<$(dirname $i)/name): $(cat ${i%_*}_label 2>/dev/null || echo $(basename ${i%_*})) $(readlink -f $i)"; done
+; to find path to desired file
+; Default reverts to thermal zone setting
+hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon2/temp1_input
+
+; Base temperature for where to start the ramp (in degrees celsius)
+; Default: 0
+base-temperature = 20
+
+; Threshold temperature to display warning label (in degrees celsius)
+; Default: 80
+warn-temperature = 60
