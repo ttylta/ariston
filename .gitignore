@@ -9,3 +9,6 @@
 .emacs.d/straight
 .emacs.d/transient
 .emacs.d/url
+plugged
+.netrwhist
+*.backup

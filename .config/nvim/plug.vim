@@ -26,6 +26,8 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
 
 " Optional
 Plug 'nvim-lua/popup.nvim'
@@ -34,10 +36,17 @@ Plug 'nvim-telescope/telescope.nvim'
 
 " File browser
 Plug 'lambdalisue/fern.vim'
+
 " Plug 'lambdalisue/fern-git-status.vim'
 Plug 'tpope/vim-vinegar'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
+
+" Trouble
+Plug 'nvim-tree/nvim-web-devicons'
+Plug 'folke/trouble.nvim'
+Plug 'folke/lsp-colors.nvim'
+
 
 " Treestitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}

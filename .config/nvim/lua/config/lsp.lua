@@ -34,6 +34,16 @@ local opts = {
     },
 }
 
+local has_words_before = function()
+  unpack = unpack or table.unpack
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+local feedkey = function(key, mode)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+end
+
 require('rust-tools').setup(opts)
 
 -- Setup nvim-cmp.
@@ -52,21 +62,35 @@ cmp.setup({
       -- vim.fn["UltiSnips#Anon"](args.body)
     end,
   },
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
+  },
   mapping = {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.close(),
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    ['<Tab>'] = function(fallback)
-      if vim.fn.pumvisible() == 1 then
-        vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
-      --- elseif luasnip.expand_or_jumpable() then
-        --- vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true), '')
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif vim.fn["vsnip#available"](1) == 1 then
+        feedkey("<Plug>(vsnip-expand-or-jump)", "")
+      elseif has_words_before() then
+        cmp.complete()
       else
-        fallback()
+        fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
       end
-    end,
+    end, { "i", "s" }),
+
+    ["<S-Tab>"] = cmp.mapping(function()
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+        feedkey("<Plug>(vsnip-jump-prev)", "")
+      end
+    end, { "i", "s" }),
   },
   sources = {
     { name = 'nvim_lsp' },
@@ -83,6 +107,25 @@ cmp.setup({
     { name = 'buffer' },
   }
 })
+
+ cmp.setup.cmdline({ '/', '?' }, {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- Shows wonderful sig info
 local on_attach = function(client, bufnr)
@@ -106,7 +149,7 @@ lspconfig.tsserver.setup{
   flags = {
     debounce_text_changes = 500,
   },
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  capabilities = capabilities,
   on_attach = on_attach
 }
 lspconfig.svelte.setup{
@@ -114,7 +157,7 @@ lspconfig.svelte.setup{
   flags = {
     debounce_text_changes = 500,
   },
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  capabilities = capabilities,
 }
 
 --- Customize how to show diagnostics: Do not use distracting virtual text
@@ -133,9 +176,15 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 -- vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})]]
 
 require'nvim-treesitter.configs'.setup {
-  highlight = {
-    enable = true,
-    custom_captures = {
+    ensure_installed = { "c", "lua", "vim", "help", "javascript", "typescript"},
+
+    sync_install = false,
+
+    auto_install = true,
+
+    highlight = {
+      enable = true,
+      custom_captures = {
       -- Highlight the @foo.bar capture group with the "Identifier" highlight group.
       ["foo.bar"] = "Identifier",
     },
@@ -151,3 +200,15 @@ require("indent_blankline").setup {
     char = "▏",
     buftype_exclude = {"terminal"}
 }
+
+ require("trouble").setup {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+    --
+    auto_open = false, -- automatically open the list when you have diagnostics
+    auto_close = false,
+    position = "bottom",
+}
+
+require'lspconfig'.gopls.setup{}
