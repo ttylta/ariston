@@ -101,3 +101,10 @@ PROMPT="$RED_BAR$BLUE_BAR═ $SHRUNKEN_PATH %# "
 source /usr/share/fzf/key-bindings.zsh
 source /usr/share/fzf/completion.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# bun completions
+[ -s "/home/tt/.bun/_bun" ] && source "/home/tt/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

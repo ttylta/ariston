@@ -1,0 +1,28 @@
+{
+    "wallpaper": "/home/tt/tmp/__naganohara_mio_aioi_yuuko_minakami_mai_annaka_haruna_sakurai_izumi_and_2_more_nichijou__64247c90ae02973e968b847e3153e269.jpg",
+    "alpha": "100",
+
+    "special": {
+        "background": "#66605a",
+        "foreground": "#fce7d4",
+        "cursor": "#fce7d4"
+    },
+    "colors": {
+        "color0": "#75706a",
+        "color1": "#bb997e",
+        "color2": "#ef8075",
+        "color3": "#a6c0e3",
+        "color4": "#fcc9b4",
+        "color5": "#d6bb86",
+        "color6": "#ebc5d0",
+        "color7": "#f5eaca",
+        "color8": "#8f8d91",
+        "color9": "#bb997e",
+        "color10": "#ef8075",
+        "color11": "#a6c0e3",
+        "color12": "#fcc9b4",
+        "color13": "#d6bb86",
+        "color14": "#ebc5d0",
+        "color15": "#f5eaca"
+    }
+}
