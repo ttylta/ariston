@@ -41,6 +41,13 @@ else
     let &t_EI = "\e[2 q"
 endif
 
+" Eta syntax
+augroup eta_ft
+  au!
+  autocmd BufNewFile,BufRead *.eta   set syntax=html
+  autocmd BufNewFile,BufRead *.art   set syntax=html
+augroup END
+
 " Better vsplit
 set splitbelow                              
 set splitright                              

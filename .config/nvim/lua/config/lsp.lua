@@ -145,6 +145,7 @@ end
 
 -- Language servers
 lspconfig.bashls.setup{ on_attach = on_attach }
+require'lspconfig'.sqlls.setup{}
 lspconfig.tsserver.setup{
   flags = {
     debounce_text_changes = 500,
@@ -212,3 +213,6 @@ require("indent_blankline").setup {
 }
 
 require'lspconfig'.gopls.setup{}
+require("mason").setup()
+
+-- vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)

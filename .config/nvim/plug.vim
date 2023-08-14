@@ -19,6 +19,7 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'neovim/nvim-lsp'
 Plug 'glepnir/lspsaga.nvim'
+Plug 'williamboman/mason.nvim'
 
 " Autocomplete
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -61,5 +62,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'evanleck/vim-svelte', {'branch': 'main'}
 Plug 'simrat39/rust-tools.nvim'
+
 
 call plug#end()
